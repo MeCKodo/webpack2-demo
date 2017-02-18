@@ -1,0 +1,4 @@
+@function r( $px ){
+  @return $px*320/$designWidth/20 + rem;
+}
+$designWidth : 640; //如设计图是750
