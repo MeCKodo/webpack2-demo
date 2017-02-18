@@ -5,7 +5,7 @@ const webpack = require('webpack');
 module.exports = {
 	output : {
 		path: path.resolve(__dirname, '../dist'),
-		publicPath: '/cdnnnnnn',
+		publicPath: require('./cdn'),
 		filename: 'static/js/[name].[chunkhash].js', // '[name].[chunkhash].js?'
 		chunkFilename: 'static/js/[id].js?[chunkhash]',
 	},
@@ -26,7 +26,7 @@ module.exports = {
 		}],
 	},
 	plugins: [
-		new ExtractTextPlugin({ filename: 'static/css/[name].css', allChunks: true }),
+		new ExtractTextPlugin({ filename: 'static/css/[name].[contenthash].css', allChunks: true }),
 		new webpack.LoaderOptionsPlugin({
 			options: {
 				postcss: [

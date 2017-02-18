@@ -6,11 +6,12 @@ const eslintFriendlyFormatter = require('eslint-friendly-formatter');
 const FriendLyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const isProduction = process.env.NODE_ENV === 'production';
-const webpackDev = require('./build/webpack.dev');
-const webpackPro = require('./build/webpack.pro');
+const webpackDev = require('./config/webpack.dev');
+const webpackPro = require('./config/webpack.pro');
 const merge = require('webpack-merge');
 
-const vueLoaderConfig = require('./build/vue-loader')(isProduction);
+const vueLoaderConfig = require('./config/vue-loader')(isProduction);
+var notifier = require('node-notifier');
 
 let base = {
 	entry: {
@@ -33,9 +34,9 @@ let base = {
 			loader: 'eslint-loader',
 			enforce: "pre",
 			// include: ['./src'],
-			// options: {
-			// 	formatter: eslintFriendlyFormatter
-			// }
+			options: {
+				formatter: eslintFriendlyFormatter
+			}
 		}, {
 			test: /\.vue$/,
 			loader: 'vue-loader',
@@ -88,6 +89,17 @@ let base = {
 			compilationSuccessInfo: {
 				messages: ['You application is running here http://localhost:3000'],
 				notes: ['Some additionnal notes to be displayed unpon successful compilation']
+			},
+			onErrors: (severity, errors) => {
+				if (severity !== 'error') {
+					return;
+				}
+				const error = errors[0];
+				notifier.notify({
+					title: 'error',
+					message: severity + ': ' + error.name,
+					subtitle: error.file || '',
+				});
 			}
 		})
 	],
@@ -101,18 +113,11 @@ let base = {
 	devtool: '#cheap-module-eval-source-map',
 };
 
-
 if(process.env.NODE_ENV !== 'production') { // dev
-	// base.module.rules = base.module.rules.concat(webpackDev.rules);
-	// base.plugins = base.plugins.concat(webpackDev.plugins);
 	base = merge(base,webpackDev);
 	
 } else { // production
 	base = merge(base,webpackPro);
-	// base.output = webpackPro.output;
-	// base.devtool = webpackPro.devtool;
-	// base.module.rules = base.module.rules.concat(webpackPro.rules);
-	// base.plugins = base.plugins.concat(webpackPro.plugins);
 }
 // console.log(base.module.rules)
 module.exports = base;
