@@ -15,13 +15,12 @@
 			return {
 				cacheRecord : [{
 					name : 'kodo1',
-					age : 118
-				}]
-			}
+					age : 118,
+				}],
+			};
 		},
-		methods : {
-		}
-	}
+		methods : {},
+	};
 </script>
 
 <style>

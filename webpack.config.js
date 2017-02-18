@@ -32,10 +32,10 @@ let base = {
 			test: /\.(js|vue|jsx)$/,
 			loader: 'eslint-loader',
 			enforce: "pre",
-			include: ['./src'],
-			options: {
-				formatter: eslintFriendlyFormatter
-			}
+			// include: ['./src'],
+			// options: {
+			// 	formatter: eslintFriendlyFormatter
+			// }
 		}, {
 			test: /\.vue$/,
 			loader: 'vue-loader',

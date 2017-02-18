@@ -10,16 +10,15 @@
 
 </style>
 <script>
-
 	export default{
-		data(){
-			return {}
+		data() {
+			return {};
 		},
 		methods: {
 			test() {
 				console.log(12);
-			}
+			},
 		},
-		components: {}
-	}
+		components: {},
+	};
 </script>
