@@ -7,28 +7,9 @@ const eslintFriendlyFormatter = require('eslint-friendly-formatter');
 const FriendLyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-let vueLoaderConfig = process.env.NODE_ENV !== 'production' ? {
-		loaders: {
-			css: 'vue-style-loader!css-loader',
-			scss: 'vue-style-loader!css-loader!sass-loader',
-		},
-	} : {
-		loaders: {
-			css: ExtractTextPlugin.extract({
-				loader: 'css-loader',
-				fallbackLoader: 'vue-style-loader'
-			}),
-			scss: ExtractTextPlugin.extract({
-				loader: 'css-loader!sass-loader',
-				fallbackLoader: 'vue-style-loader'
-			})
-		},
-		postcss: [
-			require('autoprefixer')({
-				browsers: ['last 20 versions', 'safari 5', 'opera 12.1', 'ios 7', 'android 4', '> 10%']
-			})
-		]
-};
+const webpackDev = require('./build/webpack.dev');
+const webpackPro = require('./build/webpack.pro');
+
 let base = {
 	entry: {
 		index: './src/index.js',
@@ -44,6 +25,7 @@ let base = {
 		extensions: ['.js', '.vue', '.json', '.jsx'],
 	},
 	module: {
+		noParse: /jquery|zepto|vue|vue-router|vuex/,
 		rules: [{
 			test: /\.(js|vue|jsx)$/,
 			loader: 'eslint-loader',
@@ -55,7 +37,7 @@ let base = {
 		}, {
 			test: /\.vue$/,
 			loader: 'vue-loader',
-			options: vueLoaderConfig
+			options: require('./build/vue-loader')
 		}, {
 			test: /\.js$/,
 			exclude: /node_modules/,
@@ -94,71 +76,15 @@ let base = {
 	},
 	devtool: '#cheap-module-eval-source-map',
 };
-let dev = {
-	rules : [{
-		test: /\.css$/,
-		use: ['style-loader', 'css-loader']
-	}, {
-		test: /\.scss$/,
-		use: ['style-loader', 'css-loader', 'sass-loader']
-	}]
-};
-let pro = {
-	devtool: '#source-map',
-	rules : [{
-		test: /\.css$/,
-		use: ExtractTextPlugin.extract({
-			fallbackLoader: "style-loader",
-			loader: "css-loader!postcss-loader"
-		})
-	},{
-		test: /\.scss$/,
-		use: ExtractTextPlugin.extract({
-			fallbackLoader: "style-loader",
-			loader: "css-loader!postcss-loader!sass-loader"
-		})
-	}],
-	plugins: [
-		new webpack.LoaderOptionsPlugin({
-			options: {
-				postcss: [ // <---- postcss configs go here under LoadOptionsPlugin({ options: { ??? } })
-					require('autoprefixer')({
-						browsers: ['last 20 versions', 'safari 5', 'opera 12.1', 'ios 7', 'android 4', '> 10%']
-					})
-				]
-			}
-		}),
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'vendor',
-			minChunks: function (module, count) {
-				// any required modules inside node_modules are extracted to vendor
-				return (
-					module.resource &&
-					/\.js$/.test(module.resource) &&
-					module.resource.indexOf(
-						path.join(__dirname, '../node_modules')
-					) === 0
-				)
-			}
-		}),
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings: false
-			}
-		}),
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'manifest',
-			chunks: ['vendor']
-		})
-	]
-};
+
 
 if(process.env.NODE_ENV !== 'production') { // dev
-	base.module.rules = base.module.rules.concat(dev.rules);
+	base.module.rules = base.module.rules.concat(webpackDev.rules);
 } else { // production
-	base.devtool = pro.devtool;
-	base.module.rules = base.module.rules.concat(pro.rules);
-	base.plugins = base.plugins.concat(pro.plugins);
+	base.output.filename = webpackPro.output.filename;
+	base.devtool = webpackPro.devtool;
+	base.module.rules = base.module.rules.concat(webpackPro.rules);
+	base.plugins = base.plugins.concat(webpackPro.plugins);
 }
-console.log(base.module.rules)
+// console.log(base.module.rules)
 module.exports = base;
