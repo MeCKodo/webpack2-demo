@@ -1,6 +1,7 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-module.exports = process.env.NODE_ENV !== 'production' ? {
+module.exports = function(production) {
+	return !production ? {
 		loaders: {
 			css: 'vue-style-loader!css-loader',
 			scss: 'vue-style-loader!css-loader!sass-loader',
@@ -11,7 +12,7 @@ module.exports = process.env.NODE_ENV !== 'production' ? {
 				loader: 'css-loader',
 				fallbackLoader: 'vue-style-loader'
 			}),
-			scss: ExtractTextPlugin.extract({
+				scss: ExtractTextPlugin.extract({
 				loader: 'css-loader!sass-loader',
 				fallbackLoader: 'vue-style-loader'
 			})
@@ -19,7 +20,9 @@ module.exports = process.env.NODE_ENV !== 'production' ? {
 		postcss: [
 			require('autoprefixer')({
 				browsers: ['last 20 versions', 'safari 5', 'opera 12.1', 'ios 7', 'android 4', '> 10%']
-			})
+			}),
+			require('cssnano')
 		]
-	};
+	}
+};
 		

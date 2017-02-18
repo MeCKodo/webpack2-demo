@@ -34,5 +34,10 @@
 		margin-top: 60px;
 		display: flex;
 	}
-
+	body {
+		background: #abd;
+	}
+	#kodo {
+		display: flex;
+	}
 </style>
