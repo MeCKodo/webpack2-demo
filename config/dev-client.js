@@ -7,7 +7,7 @@ const webpackConfig = merge(base,webpackDev);
 const uri = 'http://localhost:' + 3000;
 
 new webpackBrowserLog(webpackConfig,{
-	// port : 3000,
+	port : 3001,
 	devMiddleware : {
 		publicPath: webpackConfig.output.publicPath,
 		quiet: true
@@ -16,6 +16,6 @@ new webpackBrowserLog(webpackConfig,{
 		log: () => {}
 	},
 	waitUntilValid : function () {
-		console.log('> Listening at ' + uri + '\n')
+		console.log(`> Listening at ${uri}\n`)
 	}
 });
