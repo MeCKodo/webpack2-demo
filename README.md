@@ -5,7 +5,7 @@ learn webpack2
 
 ### dev
 
-1.hot-reload and compile .vue .jsx
+1.hot-reload and compile .vue
 
 2.compile sass,es6
 
@@ -16,6 +16,8 @@ learn webpack2
 5.eslint
 
 6.change environment variable
+
+7.extract two css file include css|sass files and vue files style
 
 ### build
 
