@@ -3,7 +3,7 @@
 		123
 		123
 		<router-view></router-view>
-		<router-link to="/foo">go to 2foo</router-link>
+		<router-link to="/foo">go to222222 2foo</router-link>
 
 	</div>
 </template>
@@ -31,7 +31,6 @@
 		text-align: center;
 		color: #2c3e50;
 		margin-top: 60px;
-		display: flex;
 	}
 	body {
 		background: #abd;

@@ -1,6 +1,7 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	output : {
@@ -26,6 +27,16 @@ module.exports = {
 		}],
 	},
 	plugins: [
+		new HtmlWebpackPlugin({
+			template: './src/index.html',
+			minify: {
+				removeComments: true,
+				collapseWhitespace: true,
+				removeAttributeQuotes: true
+				// more options:
+				// https://github.com/kangax/html-minifier#options-quick-reference
+			},
+		}),
 		new ExtractTextPlugin({ filename: 'static/css/[name].[contenthash].css', allChunks: true }),
 		new webpack.LoaderOptionsPlugin({
 			options: {

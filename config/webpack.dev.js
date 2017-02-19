@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const path = require('path');
+const FriendLyErrorsPlugin = require('friendly-errors-webpack-plugin');
 
 module.exports = {
 	module : {
@@ -12,8 +12,15 @@ module.exports = {
 		}],
 	},
 	plugins : [
+		new webpack.HotModuleReplacementPlugin(),
+		new webpack.NoEmitOnErrorsPlugin(),
 		new webpack.DefinePlugin({
 			'process.env': '"development"'
 		}),
+		new FriendLyErrorsPlugin({
+			compilationSuccessInfo: {
+				messages: ['You application is running here http://localhost:3000'],
+			},
+		})
 	]
 };

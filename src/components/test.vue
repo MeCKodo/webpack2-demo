@@ -2,7 +2,7 @@
 	<div @click="test">
 		im test components sa
 		<div id="kodo">
-			123
+			123dsf
 		</div>
 	</div>
 </template>
