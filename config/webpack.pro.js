@@ -3,6 +3,9 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const extractCss = new ExtractTextPlugin({ filename: 'static/css/[name].[contenthash].css' })
+const extractVueStyle = new ExtractTextPlugin({ filename: 'static/css/vue-style.[contenthash].css',allChunks: true })
+
 module.exports = {
 	output : {
 		path: path.resolve(__dirname, '../dist'),
@@ -14,13 +17,13 @@ module.exports = {
 	module : {
 		rules : [{
 			test: /\.css$/,
-			use: ExtractTextPlugin.extract({
+			use: extractCss.extract({
 				fallbackLoader: "style-loader",
 				loader: "css-loader!postcss-loader"
 			})
 		},{
 			test: /\.scss$/,
-			use: ExtractTextPlugin.extract({
+			use: extractCss.extract({
 				fallbackLoader: "style-loader",
 				loader: "css-loader!postcss-loader!sass-loader"
 			})
@@ -37,7 +40,8 @@ module.exports = {
 				// https://github.com/kangax/html-minifier#options-quick-reference
 			},
 		}),
-		new ExtractTextPlugin({ filename: 'static/css/[name].[contenthash].css', allChunks: true }),
+		extractCss,
+		extractVueStyle,
 		new webpack.LoaderOptionsPlugin({
 			options: {
 				postcss: [
