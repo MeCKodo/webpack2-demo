@@ -2,7 +2,6 @@ const { resolve } = require('path');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const eslintFriendlyFormatter = require('eslint-friendly-formatter');
 const FriendLyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const isProduction = process.env.NODE_ENV === 'production';
@@ -11,7 +10,6 @@ const webpackPro = require('./config/webpack.pro');
 const merge = require('webpack-merge');
 
 const vueLoaderConfig = require('./config/vue-loader')(isProduction);
-var notifier = require('node-notifier');
 
 let base = {
 	entry: {
@@ -33,10 +31,6 @@ let base = {
 			test: /\.(js|vue|jsx)$/,
 			loader: 'eslint-loader',
 			enforce: "pre",
-			// include: ['./src'],
-			options: {
-				formatter: eslintFriendlyFormatter
-			}
 		}, {
 			test: /\.vue$/,
 			loader: 'vue-loader',
@@ -88,19 +82,7 @@ let base = {
 		new FriendLyErrorsPlugin({
 			compilationSuccessInfo: {
 				messages: ['You application is running here http://localhost:3000'],
-				notes: ['Some additionnal notes to be displayed unpon successful compilation']
 			},
-			onErrors: (severity, errors) => {
-				if (severity !== 'error') {
-					return;
-				}
-				const error = errors[0];
-				notifier.notify({
-					title: 'error',
-					message: severity + ': ' + error.name,
-					subtitle: error.file || '',
-				});
-			}
 		})
 	],
 	devServer: {
