@@ -1,5 +1,7 @@
 const webpack = require('webpack');
 const FriendLyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const isProduction = process.env.NODE_ENV === 'production';
+const vueLoaderConfig = require('./vue-loader')(isProduction);
 
 module.exports = {
 	module : {
@@ -9,6 +11,10 @@ module.exports = {
 		}, {
 			test: /\.scss$/,
 			use: ['style-loader', 'css-loader', 'sass-loader']
+		}, {
+			test: /\.vue$/,
+			loader: 'vue-loader',
+			options: vueLoaderConfig
 		}],
 	},
 	plugins : [

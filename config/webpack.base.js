@@ -2,10 +2,8 @@ const { resolve } = require('path');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const isProduction = process.env.NODE_ENV === 'production';
 const merge = require('webpack-merge');
 
-const vueLoaderConfig = require('./vue-loader')(isProduction);
 
 module.exports = {
 	entry: {
@@ -27,10 +25,6 @@ module.exports = {
 			test: /\.(js|vue|jsx)$/,
 			loader: 'eslint-loader',
 			enforce: "pre",
-		}, {
-			test: /\.vue$/,
-			loader: 'vue-loader',
-			options: vueLoaderConfig
 		}, {
 			test: /\.js$/,
 			exclude: /node_modules/,

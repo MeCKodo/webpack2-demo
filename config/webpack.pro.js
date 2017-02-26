@@ -6,6 +6,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const extractCss = new ExtractTextPlugin({ filename: 'static/css/[name].[contenthash].css' })
 const extractVueStyle = new ExtractTextPlugin({ filename: 'static/css/vue-style.[contenthash].css',allChunks: true })
 
+const isProduction = process.env.NODE_ENV === 'production';
+const vueLoaderConfig = require('./vue-loader')(isProduction, extractVueStyle);
+
 module.exports = {
 	output : {
 		path: path.resolve(__dirname, '../dist'),
@@ -27,6 +30,10 @@ module.exports = {
 				fallbackLoader: "style-loader",
 				loader: "css-loader!postcss-loader!sass-loader"
 			})
+		}, {
+			test: /\.vue$/,
+			loader: 'vue-loader',
+			options: vueLoaderConfig
 		}],
 	},
 	plugins: [

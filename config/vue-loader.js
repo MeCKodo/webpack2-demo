@@ -1,6 +1,5 @@
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-module.exports = function(production) {
+module.exports = function(production,extractVueStyle) {
 	return !production ? {
 		loaders: {
 			css: 'vue-style-loader!css-loader',
@@ -8,11 +7,11 @@ module.exports = function(production) {
 		},
 	} : {
 		loaders: {
-			css: ExtractTextPlugin.extract({
+			css: extractVueStyle.extract({
 				loader: 'css-loader',
 				fallbackLoader: 'vue-style-loader'
 			}),
-				scss: ExtractTextPlugin.extract({
+				scss: extractVueStyle.extract({
 				loader: 'css-loader!sass-loader',
 				fallbackLoader: 'vue-style-loader'
 			})
