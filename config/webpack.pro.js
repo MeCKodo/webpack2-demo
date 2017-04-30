@@ -3,13 +3,16 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const extractCss = new ExtractTextPlugin({ filename: 'static/css/[name].[contenthash].css' })
-const extractVueStyle = new ExtractTextPlugin({ filename: 'static/css/vue-style.[contenthash].css',allChunks: true })
+const extractCss = new ExtractTextPlugin({ filename: 'static/css/[name].[contenthash].css' });
+const extractVueStyle = new ExtractTextPlugin({ filename: 'static/css/vue-style.[contenthash].css',allChunks: true });
 
 const isProduction = process.env.NODE_ENV === 'production';
 const vueLoaderConfig = require('./vue-loader')(isProduction, extractVueStyle);
-
-module.exports = {
+let pro = {
+	entry: {
+		"index": ['./src/index.js'],
+		vendor: ['vue', 'vue-router', 'vuex'],
+	},
 	output : {
 		path: path.resolve(__dirname, '../dist'),
 		publicPath: require('./cdn'),
@@ -21,14 +24,14 @@ module.exports = {
 		rules : [{
 			test: /\.css$/,
 			use: extractCss.extract({
-				fallbackLoader: "style-loader",
-				loader: "css-loader!postcss-loader"
+				fallback: "style-loader",
+				use: "css-loader!postcss-loader"
 			})
 		},{
 			test: /\.scss$/,
 			use: extractCss.extract({
-				fallbackLoader: "style-loader",
-				loader: "css-loader!postcss-loader!sass-loader"
+				fallback: "style-loader",
+				use: "css-loader!postcss-loader!sass-loader"
 			})
 		}, {
 			test: /\.vue$/,
@@ -59,13 +62,16 @@ module.exports = {
 				]
 			}
 		}),
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings: false
-			}
-		}),
 		new webpack.DefinePlugin({
-			'process.env': '"production"'
+			'process.env': JSON.stringify(process.env.NODE_ENV)
 		}),
 	]
 };
+if(isProduction) {
+	pro.plugins.push(new webpack.optimize.UglifyJsPlugin({
+		compress: {
+			warnings: false
+		}
+	}))
+}
+module.exports = pro;

@@ -4,6 +4,10 @@ const isProduction = process.env.NODE_ENV === 'production';
 const vueLoaderConfig = require('./vue-loader')(isProduction);
 
 module.exports = {
+	entry: {
+		index: ['webpack-hot-middleware/client?reload=true','./src/index.js'],
+		vendor: ['vue', 'vue-router', 'vuex'],
+	},
 	module : {
 		rules : [{
 			test: /\.css$/,

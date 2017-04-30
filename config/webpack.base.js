@@ -4,12 +4,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 
-
 module.exports = {
-	entry: {
-		index: ['webpack-hot-middleware/client?reload=true','./src/index.js'],
-		vendor: ['vue', 'vue-router', 'vuex'],
-	},
 	output: {
 		// publicPath: '/static/',
 		path: resolve(__dirname, '../dist'),

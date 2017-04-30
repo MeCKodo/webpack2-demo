@@ -14,7 +14,7 @@
 		data() {
 			return {
 				cacheRecord : [{
-					name : 'kodo1',
+					name : '二哲',
 					age : 118,
 				}],
 			};
